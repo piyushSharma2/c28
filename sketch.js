@@ -1,6 +1,7 @@
 const Engine = Matter.Engine;
 const World= Matter.World;
 const Bodies = Matter.Bodies;
+const Events =Matter.Events;
 const Constraint = Matter.Constraint;
 
 var engine, world;
@@ -38,14 +39,14 @@ function setup(){
 
     bird = new Bird(100,100);
 
-    log6 = new Log(230,180,80, PI/2);
-    chain = new Chain(bird.body,log6.body);
+    slingShot = new SlingShot(bird.body,{x:155,y:65});
 }
 
 function draw(){
     background(backgroundImg);
     Engine.update(engine);
     strokeWeight(4);
+
     box1.display();
     box2.display();
     ground.display();
@@ -63,6 +64,19 @@ function draw(){
 
     bird.display();
     platform.display();
-    log6.display();
-    chain.display();    
+    slingShot.display(); 
+       
+}
+
+function mouseDragged(){
+    
+    Events.on(engine,"afterUpdate",function(){
+        Matter.Body.setPosition(bird.body,{x:mouseX,y:mouseY})
+    })
+
+}
+
+function mouseReleased(){
+slingShot.fly();
+engine.events={}
 }
